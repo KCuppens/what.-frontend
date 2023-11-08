@@ -2,7 +2,7 @@ import Table from "./shared/Table"
 
 const Dashboard = () => {
   return (
-    <div>
+    <div className="bg-default bg-cover bg-center bg-no-repeat h-screen py-10">
         <Table />
     </div>
   )
