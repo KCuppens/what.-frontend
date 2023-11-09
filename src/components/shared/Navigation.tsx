@@ -1,16 +1,7 @@
-import { useNavigate } from 'react-router-dom';
 import { useUserContext } from '../../contexts/UserContext';
-import { useEffect } from 'react';
 
 const Navigation = () => {
-  const { user, isAuthenticated, logoutUser } = useUserContext();
-  const navigate = useNavigate();
-
-  useEffect(() => {
-      if (!isAuthenticated) {
-          navigate("/");
-      }
-  }, [isAuthenticated, navigate]);
+  const { user, logoutUser } = useUserContext();
 
   const handleLogout = () => {
       logoutUser();

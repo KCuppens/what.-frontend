@@ -1,9 +1,8 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
 
 type User = {
     email: string;
-    token: string
+    token: string;
 };
 
 interface UserContextType {
@@ -27,45 +26,35 @@ export const useUserContext = () => {
     return context;
 };
 
-function parseJSON<T>(value: string | null): T | null {
-    if (value === null) return null;
-    try {
-        return JSON.parse(value);
-    } catch {
-        return null;
-    }
-}
-
 export const UserProvider = ({ children }: UserProviderProps) => {
-    const [user, setUser] = useState<User | null>(parseJSON<User>(localStorage.getItem('user')));
+    const [user, setUser] = useState<User | null>(JSON.parse(localStorage.getItem('user') ?? 'null'));
     const [isAuthenticated, setIsAuthenticated] = useState(!!user);
-    const apiUrl = import.meta.env.VITE_API_URL;
-    const navigate = useNavigate();
-
+    const apiUrl = import.meta.env.VITE_API_URL || 'http://default-api-url.com/';
 
     useEffect(() => {
-        if (user) {
-            localStorage.setItem('user', JSON.stringify(user));
-        } else {
-            localStorage.removeItem('user');
-        }
+        localStorage.setItem('user', JSON.stringify(user));
     }, [user]);
 
     const loginUser = async (email: string, password: string) => {
-        const response = await fetch(apiUrl + 'users/login-user/', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ email, password }),
-        });
+        try {
+            const response = await fetch(`${apiUrl}users/login-user/`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email, password }),
+            });
 
-        if (!response.ok) {
-            const { message } = await response.json();
-            throw new Error(message);
+            if (!response.ok) {
+                const { message } = await response.json();
+                throw new Error(message);
+            }
+
+            const userData = await response.json();
+            setUser(userData.data);
+            setIsAuthenticated(true);
+        } catch (error) {
+            console.error('Login failed:', error);
+            // Optionally, handle the error more robustly here.
         }
-
-        const userData = await response.json();
-        setUser(userData.data);
-        setIsAuthenticated(true);
     };
 
     const logoutUser = () => {
