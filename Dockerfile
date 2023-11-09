@@ -1,25 +1,27 @@
-FROM node:16.15.1
+FROM node:latest as builder
 
-# for caching optimisations
-COPY package*.json /
+WORKDIR /app  
+
+COPY package*.json ./
+
 RUN npm install
-# required to serve the react app on the live server
-RUN npm install -g serve
 
-COPY . /app
-WORKDIR /app
+COPY . .
 
-# noop files for non python projects and local development
-RUN echo "#!/bin/bash" > /app/migrate.sh && chmod +x /app/migrate.sh
-RUN echo "#!/bin/bash" > /usr/local/bin/start && chmod +x /usr/local/bin/start
+ARG VITE_API_URL
+
+ENV VITE_API_URL=$VITE_API_URL
+
 
 ENV PATH=/node_modules/.bin:$PATH
-ENV PORT=80
-ENV HOST=0.0.0.0
-ENV BROWSER='none'
 
 RUN npm run build
 
-EXPOSE 80
 
-CMD ["serve", "-s", "build", "-l", "80"]
+FROM nginx:latest
+COPY --from=builder /app/dist /usr/share/nginx/html
+RUN rm /etc/nginx/conf.d/default.conf
+COPY ./nginx/default.conf /etc/nginx/conf.d
+
+EXPOSE 5173
+CMD ["nginx", "-g", "daemon off;"]
