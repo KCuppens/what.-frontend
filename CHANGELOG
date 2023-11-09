@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Login through dummy backend API and store email and token in session (ENG-2)
 - Products table (ENG-3)
 - Handle search on change, sorting filters for name and id, store in session (ENG-4)
+- Handle select products (ENG-5)
 
 ### Changed
 ### Fixed

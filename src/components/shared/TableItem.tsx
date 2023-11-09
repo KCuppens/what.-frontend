@@ -1,6 +1,17 @@
 import SelectButton from "./SelectButton";
 
-const ProductItem = ({ product }) => {
+interface ProductProps {
+    product : {
+        id: number;
+        name: string;
+        description: string;
+        stock: number;
+        price: number;
+        is_selected: boolean;
+    }
+}
+
+const TableItem = ({ product }: ProductProps) => {
     return (
         <tr className="border-b">
             <td className="px-4 py-3">{product.id}</td>
@@ -9,10 +20,10 @@ const ProductItem = ({ product }) => {
             <td className="px-4 py-3">{product.stock}</td>
             <td className="px-4 py-3">${product.price}</td>
             <td className="px-4 py-3">
-                <SelectButton productId={product.id} />
+                <SelectButton productId={product.id} is_selected={product.is_selected} />
             </td>
         </tr>
     );
 };
 
-export default ProductItem;
+export default TableItem;

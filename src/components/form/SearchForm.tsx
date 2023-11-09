@@ -7,11 +7,10 @@ const SearchForm = () => {
   const [searchValue, setSearchValue] = useState(initialSearchQuery);
   useEffect(() => {
     setSearchQuery(searchValue);
-    // Update local storage when searchValue changes
     localStorage.setItem('searchQuery', searchValue);
   }, [searchValue, setSearchQuery]);
 
-  const handleSearch = event => {
+  const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearchValue(event.target.value);
   };
   return (

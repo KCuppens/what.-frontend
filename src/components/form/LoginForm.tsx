@@ -3,13 +3,17 @@ import { useUserContext } from '../../contexts/UserContext';
 import { useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
 
+type LoginFormData = {
+    email: string;
+    password: string;
+};
 
 const LoginForm = () => {
-    const { register, handleSubmit, formState: { errors } } = useForm();
+    const { register, handleSubmit, formState: { errors } } = useForm<LoginFormData>();
     const { loginUser, isAuthenticated } = useUserContext();
     const navigate = useNavigate();
 
-    const onSubmit = data => {
+    const onSubmit = (data: LoginFormData) => {
         loginUser(data.email, data.password);
     };
 
