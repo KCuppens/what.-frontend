@@ -2,7 +2,6 @@ import { useUserContext } from '../../contexts/UserContext';
 
 const Navigation = () => {
   const { user, logoutUser } = useUserContext();
-  console.log(user)
   return (
     <header>
       <nav className="bg-white border-gray-200 px-4 lg:px-6 py-2.5">
