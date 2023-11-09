@@ -1,0 +1,11 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer utilities {
+  .bg-default {
+    background-image: url('/src/assets/mesh-gradient.png');
+  }
+}
+
+
