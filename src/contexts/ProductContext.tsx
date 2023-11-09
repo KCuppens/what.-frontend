@@ -1,10 +1,49 @@
 import { createContext, useContext, useState, useEffect } from 'react';
 
-const ProductContext = createContext();
+type Product = {
+    id: number;
+    name: string;
+    description: string;
+    stock: number;
+    price: number;
+    is_selected: boolean;
+};
 
-export const useProductContext = () => useContext(ProductContext);
+interface ProductContextType {
+    products: Product[];
+    isLoading: boolean;
+    setSearchQuery: (query: string) => void;
+    setOrder: (order: string) => void;
+}
 
-export const ProductProvider = ({ children }) => {
+const defaultContext: ProductContextType = {
+    products: [],
+    isLoading: false,
+    setOrder: () => {},
+    setSearchQuery: () => {},
+};
+
+const ProductContext = createContext<ProductContextType>(defaultContext);
+
+interface ProductProviderProps {
+    children: React.ReactNode;
+}
+
+export const useProductContext = (): ProductContextType => {
+    const context = useContext(ProductContext);
+    if (context === undefined) {
+        throw new Error('useProductContext must be used within a ProductProvider');
+    }
+    return context;
+};
+
+export const ProductProvider = ({ children }: ProductProviderProps) => {
+    const headers = new Headers();
+    const userString = localStorage.getItem('user');
+    const user = userString ? JSON.parse(userString) : null;
+    if (user && user.email) {
+        headers.append('X-User-Email', user.email);
+    }
     const initialSearchQuery = localStorage.getItem('searchQuery') || '';
     const initialOrder = localStorage.getItem('order') || 'name';
 
@@ -22,7 +61,7 @@ export const ProductProvider = ({ children }) => {
         if (order) queryParams.append('ordering', order);
         setIsLoading(true);
         const url = `${apiUrl}products/products/?${queryParams.toString()}`;
-        fetch(url)
+        fetch(url, { headers })
             .then(response => response.json())
             .then(data => {
                 setProducts(data);

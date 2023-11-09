@@ -1,7 +1,21 @@
+import { useNavigate } from 'react-router-dom';
 import { useUserContext } from '../../contexts/UserContext';
+import { useEffect } from 'react';
 
 const Navigation = () => {
-  const { user, logoutUser } = useUserContext();
+  const { user, isAuthenticated, logoutUser } = useUserContext();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+      if (!isAuthenticated) {
+          navigate("/");
+      }
+  }, [isAuthenticated, navigate]);
+
+  const handleLogout = () => {
+      logoutUser();
+  };
+
   return (
     <header>
       <nav className="bg-white border-gray-200 px-4 lg:px-6 py-2.5">
@@ -10,7 +24,7 @@ const Navigation = () => {
           {user ? (
             <div>
               <p>Welcome, {user.email}</p>
-              <button onClick={logoutUser}>Logout</button>
+              <button onClick={handleLogout}>Logout</button>
             </div>
           ) : (
             <div className="flex items-center lg:order-2">

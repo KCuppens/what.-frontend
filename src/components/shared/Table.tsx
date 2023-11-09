@@ -3,6 +3,19 @@ import { useProductContext } from '../../contexts/ProductContext';
 import ProductItem from './TableItem';
 import { useState } from 'react';
 
+type SortField = 'id' | 'name' | 'description' | 'stock' | 'price';
+type SortDirection = 'asc' | 'desc' | '';
+
+type Product = {
+  id: number;
+  name: string;
+  description: string;
+  stock: number;
+  price: number;
+  is_selected: boolean;
+};
+
+
 const Table = () => {
   const { products, isLoading, setOrder } = useProductContext();
   const initialSortField = localStorage.getItem('sortField') || '';
@@ -10,7 +23,7 @@ const Table = () => {
 
   const [sortField, setSortField] = useState(initialSortField);
   const [sortDirection, setSortDirection] = useState(initialSortDirection);
-  const handleSort = field => {
+  const handleSort = (field: SortField) => {
     const isAscending = sortField === field && sortDirection === 'asc';
     const newOrder = isAscending ? `-${field}` : field;
     const newDirection = isAscending ? 'desc' : 'asc';
@@ -22,7 +35,7 @@ const Table = () => {
     localStorage.setItem('sortField', field);
     localStorage.setItem('sortDirection', newDirection);
   };
-  const getArrowStyle = (field, direction) => {
+  const getArrowStyle = (field: SortField, direction: SortDirection): string => {
     if (field !== sortField) {
       return 'text-gray-400'; // Default color for inactive fields
     }
@@ -69,7 +82,8 @@ const Table = () => {
               </tr>
             </thead>
             <tbody>
-              {products.map(product => (
+              {products.length == 0 && <tr className="text-center h-10"><td colSpan={6}>No products found...</td></tr>}
+              {products.map((product: Product) => (
                 <ProductItem key={product.id} product={product} />
               ))}
             </tbody>
