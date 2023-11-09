@@ -1,5 +1,4 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import { set } from 'react-hook-form';
 
 export const UserContext = createContext();
 
@@ -8,6 +7,7 @@ export const useUserContext = () => useContext(UserContext);
 export const UserProvider = ({ children }) => {
     const [user, setUser] = useState(JSON.parse(localStorage.getItem('user')) || null);
     const [isAuthenticated, setIsAuthenticated] = useState(!!user);
+    const apiUrl = import.meta.env.VITE_API_URL;
 
     useEffect(() => {
         if (user) {
@@ -18,7 +18,7 @@ export const UserProvider = ({ children }) => {
     }, [user]);
 
     const loginUser = async (email, password) => {
-        const response = await fetch('http://localhost:8000/api/v1/users/login-user/', {
+        const response = await fetch(apiUrl + 'users/login-user/', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ email, password }),
