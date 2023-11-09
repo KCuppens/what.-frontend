@@ -18,7 +18,7 @@ const SelectButton = ({ productId, is_selected: isInitiallySelected  }: SelectBu
         }
 
         const payload = { user_email: userEmail, product_id: productId };
-        const apiUrl = import.meta.env.VITE_API_URL;
+        const apiUrl = "https://what-backend-1849-stage.us.aldryn.io/api/v1/";
 
         fetch(apiUrl + 'carts/toggle-cart-item/', {
             method: 'POST',

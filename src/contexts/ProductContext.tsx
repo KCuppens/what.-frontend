@@ -51,7 +51,7 @@ export const ProductProvider = ({ children }: ProductProviderProps) => {
     const [searchQuery, setSearchQuery] = useState(initialSearchQuery);
     const [order, setOrder] = useState(initialOrder);
     const [isLoading, setIsLoading] = useState(true);
-    const apiUrl = import.meta.env.VITE_API_URL;
+    const apiUrl = "https://what-backend-1849-stage.us.aldryn.io/api/v1/";
     useEffect(() => {
         localStorage.setItem('searchQuery', searchQuery);
         localStorage.setItem('order', order);

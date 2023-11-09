@@ -29,7 +29,7 @@ export const useUserContext = () => {
 export const UserProvider = ({ children }: UserProviderProps) => {
     const [user, setUser] = useState<User | null>(JSON.parse(localStorage.getItem('user') ?? 'null'));
     const [isAuthenticated, setIsAuthenticated] = useState(!!user);
-    const apiUrl = import.meta.env.VITE_API_URL || 'http://default-api-url.com/';
+    const apiUrl = "https://what-backend-1849-stage.us.aldryn.io/api/v1/";
 
     useEffect(() => {
         localStorage.setItem('user', JSON.stringify(user));
