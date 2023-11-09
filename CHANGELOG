@@ -9,6 +9,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Setup project with docker and add basic styling (ENG-1)
 - Login through dummy backend API and store email and token in session (ENG-2)
-
+- Products table (ENG-3)
 ### Changed
 ### Fixed
